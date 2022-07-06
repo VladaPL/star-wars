@@ -1,6 +1,13 @@
 .random-planet {
     display: flex;
     padding: 1rem;
+    margin-bottom: 20px;
+    justify-content: center;
+    background-color: #303030;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    
   }
   
   .random-planet .planet-image {
