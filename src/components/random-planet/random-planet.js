@@ -6,18 +6,22 @@ import ErrorIndicator from "../error-indicator/error-indicator";
 import "./random-planet.css";
 
 export default class RandomPlanet extends Component {
+
     SwapiService = new SwapiService(); // вызвали сервис, который получит данные
 
     state = {
         planet: {},
         loading: true,
     };
-
     // Отправляем запрос к серверу каждый раз когда создаем компонент, он будет сам себя обновлять (поэтому вызов в конструкторе)
 
-    constructor() {
-        super();
+    componentDidMount() {  // Используем для инициализации (работа с DOM-элементами, получение данных).
         this.updatePlanet();
+        this.interval = setInterval(this.updatePlanet, 10000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     onPlanetLoaded = (planet) => {
@@ -26,24 +30,25 @@ export default class RandomPlanet extends Component {
             loading: false,
             error: false
         });
-    }
+    };
 
     onError = (err) => {
         this.setState({
             error: true,
             loading: false
         });
-    }
+    };
 
-    updatePlanet() {
-        const id = Math.floor(Math.random() * 25) + 2;
+    updatePlanet = () => {
+        const id = Math.floor(Math.random() * 25) + 3;
         this.SwapiService
             .getPlanet(id)
             .then(this.onPlanetLoaded)
             .catch(this.onError);
-    }
+    };
 
     render() {
+
         const { planet, loading, error } = this.state;
 
         const hasData = !(loading || error);
