@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import SwapiService from "../../services";
+import ErrorButton from "../error-button";
 import ErrorIndicator from "../error-indicator/error-indicator";
 import Spinner from "../spinner";
 
@@ -25,10 +26,10 @@ export default class PersonDetails extends Component {
     }
 
     onPersonLoaded = (person) => {
-        this.setState ({
+        this.setState({
             person,
             loading: false,
-            error: false
+            error: false,
         });
     };
 
@@ -47,25 +48,22 @@ export default class PersonDetails extends Component {
 
         this.SwapiService.getPerson(personId)
             .then(this.onPersonLoaded)
-            .catch(this.onError)
-        ;
-        
+            .catch(this.onError);
     };
 
     render() {
-
         const { person, loading, error } = this.state;
 
         if (!person) {
             return <span> Select a person from a list</span>;
         }
 
-        const hasData = !(loading||error); // Если не загрузка и не ошибка, то контент
+        const hasData = !(loading || error); // Если не загрузка и не ошибка, то контент
 
-        const errorMessage = error ? <ErrorIndicator/> : null;
-        console.log(loading);
-        const spinner = loading ? <Spinner/> : null;
-        const content = hasData ? <PersonView person={person}/> : null; 
+        const errorMessage = error ? <ErrorIndicator /> : null;
+        const spinner = loading ? <Spinner /> : null;
+        // TODO: Spinner не отображается при смене персонажа по клику на список
+        const content = hasData ? <PersonView person={person} /> : null;
 
         return (
             <div className="person-details card">
@@ -77,7 +75,7 @@ export default class PersonDetails extends Component {
     }
 }
 
-const PersonView = ({person}) => {
+const PersonView = ({ person }) => {
     const { id, name, gender, birthYear, eyeColor } = person;
 
     return (
@@ -88,9 +86,7 @@ const PersonView = ({person}) => {
             />
 
             <div className="card-body">
-                <h4>
-                    {name}
-                </h4>
+                <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item">
                         <span className="term">Gender</span>
@@ -103,6 +99,9 @@ const PersonView = ({person}) => {
                     <li className="list-group-item">
                         <span className="term">Eye Color</span>
                         <span>{eyeColor}</span>
+                    </li>
+                    <li className="list-group-item">
+                        <ErrorButton/>
                     </li>
                 </ul>
             </div>
