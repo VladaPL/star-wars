@@ -45,6 +45,17 @@ export default class App extends Component {
             return <ErrorIndicator/>;
         }
 
+        const itemList = (
+            <ItemList 
+            onItemSelected={this.onPersonSelected}
+            getData={this.swapiService.getAllPlanets}
+            renderItem={(item)=>item.name}/>
+        );
+
+        const personDetails = (
+            <PersonDetails personId={this.state.selectedPerson} />
+        );
+
         const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
 
         return (
@@ -65,25 +76,10 @@ export default class App extends Component {
 
                 <div className="row mb2">
                     <div className="col-md-6">
-                        <ItemList 
-                            onItemSelected={this.onPersonSelected}
-                            getData={this.swapiService.getAllPlanets}
-                            renderItem={(item)=>item.name}/>
+                        {itemList}
                     </div>
                     <div className="col-md-6">
-                        <PersonDetails personId={this.state.selectedPerson} />
-                    </div>
-                </div>
-
-                <div className="row mb2">
-                    <div className="col-md-6">
-                        <ItemList 
-                            onItemSelected={this.onPersonSelected}
-                            getData={this.swapiService.getAllStarships}
-                            renderItem={(item)=>item.name}/>
-                    </div>
-                    <div className="col-md-6">
-                        <PersonDetails personId={this.state.selectedPerson} />
+                        {personDetails}
                     </div>
                 </div>
             </div>
