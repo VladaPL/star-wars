@@ -4,13 +4,13 @@ import ErrorButton from "../error-button";
 import ErrorIndicator from "../error-indicator/error-indicator";
 import Spinner from "../spinner";
 
-import "./person-details.css";
+import "./item-details.css";
 
-export default class PersonDetails extends Component {
+export default class ItemDetails extends Component {
     SwapiService = new SwapiService();
 
     state = {
-        person: null,
+        item: null,
         loading: true,
     };
 
@@ -20,14 +20,14 @@ export default class PersonDetails extends Component {
 
     componentDidUpdate(prevProps) {
         // Всегда проверяем через условие обновилось ли значение, воизбежание бесконечного цикла
-        if (this.props.personId !== prevProps.personId) {
+        if (this.props.itemId !== prevProps.itemId) {
             this.updatePerson();
         }
     }
 
-    onPersonLoaded = (person) => {
+    onPersonLoaded = (item) => {
         this.setState({
-            person,
+            item,
             loading: false,
             error: false,
         });
@@ -41,21 +41,21 @@ export default class PersonDetails extends Component {
     };
 
     updatePerson = () => {
-        const { personId } = this.props;
-        if (!personId) {
+        const { itemId } = this.props;
+        if (!itemId) {
             return;
         }
 
-        this.SwapiService.getPerson(personId)
+        this.SwapiService.getPerson(itemId)
             .then(this.onPersonLoaded)
             .catch(this.onError);
     };
 
     render() {
-        const { person, loading, error } = this.state;
+        const { item, loading, error } = this.state;
 
-        if (!person) {
-            return <span> Select a person from a list</span>;
+        if (!item) {
+            return <span> Select a item from a list</span>;
         }
 
         const hasData = !(loading || error); // Если не загрузка и не ошибка, то контент
@@ -63,10 +63,10 @@ export default class PersonDetails extends Component {
         const errorMessage = error ? <ErrorIndicator /> : null;
         const spinner = loading ? <Spinner /> : null;
         // TODO: Spinner не отображается при смене персонажа по клику на список
-        const content = hasData ? <PersonView person={person} /> : null;
+        const content = hasData ? <PersonView item={item} /> : null;
 
         return (
-            <div className="person-details card">
+            <div className="item-details card">
                 {errorMessage}
                 {spinner}
                 {content}
@@ -75,14 +75,15 @@ export default class PersonDetails extends Component {
     }
 }
 
-const PersonView = ({ person }) => {
-    const { id, name, gender, birthYear, eyeColor } = person;
+const PersonView = ({ item }) => {
+    const { id, name, gender, birthYear, eyeColor } = item;
 
     return (
         <React.Fragment>
             <img
-                className="person-image"
+                className="item-image"
                 src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}
+                alt="item-img"
             />
 
             <div className="card-body">
@@ -101,7 +102,7 @@ const PersonView = ({ person }) => {
                         <span>{eyeColor}</span>
                     </li>
                     <li className="list-group-item">
-                        <ErrorButton/>
+                        <ErrorButton />
                     </li>
                 </ul>
             </div>

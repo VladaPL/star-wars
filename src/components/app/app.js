@@ -4,7 +4,7 @@ import Header from "../header";
 import RandomPlanet from "../random-planet";
 import PeoplePage from "../people-page";
 import ItemList from "../item-list";
-import PersonDetails from "../person-details";
+import ItemDetails from "../item-details";
 import ErrorButton from "../error-button";
 
 import "./app.css";
@@ -12,12 +12,11 @@ import ErrorIndicator from "../error-indicator/error-indicator";
 import SwapiService from "../../services";
 
 export default class App extends Component {
-
     swapiService = new SwapiService();
 
     state = {
         showRandomPlanet: true,
-        hasError: false
+        hasError: false,
     };
 
     toggleRandomPlanet = () => {
@@ -30,30 +29,30 @@ export default class App extends Component {
 
     onPersonSelected = (id) => {
         this.setState({
-            selectedPerson: id
+            selectedPerson: id,
         });
     };
 
     componentDidCatch() {
-        console.log('componentDidCatch()');
+        console.log("componentDidCatch()");
         this.setState({ hasError: true });
     }
 
     render() {
-
-        if(this.state.hasError) {
-            return <ErrorIndicator/>;
+        if (this.state.hasError) {
+            return <ErrorIndicator />;
         }
 
         const itemList = (
-            <ItemList 
-            onItemSelected={this.onPersonSelected}
-            getData={this.swapiService.getAllPlanets}
-            renderItem={(item)=>item.name}/>
+            <ItemList
+                onItemSelected={this.onPersonSelected}
+                getData={this.swapiService.getAllPlanets}
+                renderItem={(item) => item.name}
+            />
         );
 
         const personDetails = (
-            <PersonDetails personId={this.state.selectedPerson} />
+            <ItemDetails personId={this.state.selectedPerson} />
         );
 
         const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
@@ -72,16 +71,7 @@ export default class App extends Component {
                     </button>
                     <ErrorButton />
                 </div>
-                <PeoplePage/>
-
-                <div className="row mb2">
-                    <div className="col-md-6">
-                        {itemList}
-                    </div>
-                    <div className="col-md-6">
-                        {personDetails}
-                    </div>
-                </div>
+                <PeoplePage />
             </div>
         );
     }
