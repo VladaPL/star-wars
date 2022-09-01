@@ -7,15 +7,16 @@ import Spinner from "../spinner";
 import "./item-details.css";
 
 export default class ItemDetails extends Component {
-    SwapiService = new SwapiService();
+    swapiService = new SwapiService();
 
     state = {
         item: null,
-        loading: true,
+        image: null,
+        //loading: true,
     };
 
     componentDidMount() {
-        this.updatePerson();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
@@ -25,37 +26,40 @@ export default class ItemDetails extends Component {
         }
     }
 
-    onPersonLoaded = (item) => {
-        this.setState({
-            item,
-            loading: false,
-            error: false,
-        });
-    };
+    // onPersonLoaded = (item) => {
+    //     this.setState({
+    //         item,
+    //         loading: false,
+    //         error: false,
+    //     });
+    // };
 
-    onError = (err) => {
-        this.setState({
-            error: true,
-            loading: false,
-        });
-    };
+    // onError = (err) => {
+    //     this.setState({
+    //         error: true,
+    //         loading: false,
+    //     });
+    // };
 
-    updatePerson = () => {
-        const { itemId } = this.props;
+    updateItem() {
+        const { itemId, getData, getImageUrl } = this.props;
         if (!itemId) {
             return;
         }
 
-        this.SwapiService.getPerson(itemId)
-            .then(this.onPersonLoaded)
-            .catch(this.onError);
-    };
+        getData(itemId).then((item) => {
+            this.setState({
+                item,
+                image: getImageUrl(item),
+            });
+        });
+    }
 
     render() {
-        const { item, loading, error } = this.state;
+        const { item, loading, error, image } = this.state;
 
         if (!item) {
-            return <span> Select a item from a list</span>;
+            return <span> Select an item from a list</span>;
         }
 
         const hasData = !(loading || error); // Если не загрузка и не ошибка, то контент
@@ -63,7 +67,7 @@ export default class ItemDetails extends Component {
         const errorMessage = error ? <ErrorIndicator /> : null;
         const spinner = loading ? <Spinner /> : null;
         // TODO: Spinner не отображается при смене персонажа по клику на список
-        const content = hasData ? <PersonView item={item} /> : null;
+        const content = hasData ? <PersonView item={item} image={image} /> : null;
 
         return (
             <div className="item-details card">
@@ -75,14 +79,14 @@ export default class ItemDetails extends Component {
     }
 }
 
-const PersonView = ({ item }) => {
-    const { id, name, gender, birthYear, eyeColor } = item;
+const PersonView = ({ item, image }) => {
+    const { name, gender, birthYear, eyeColor } = item;
 
     return (
         <React.Fragment>
             <img
                 className="item-image"
-                src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`}
+                src={image}
                 alt="item-img"
             />
 

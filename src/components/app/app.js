@@ -1,15 +1,17 @@
 import React, { Component } from "react";
 
 import Header from "../header";
-import RandomPlanet from "../random-planet";
-import PeoplePage from "../people-page";
-import ItemList from "../item-list";
+//import RandomPlanet from "../random-planet";
+//import PeoplePage from "../people-page";
+//import ItemList from "../item-list";
 import ItemDetails from "../item-details";
-import ErrorButton from "../error-button";
+//import ErrorButton from "../error-button";
+import ErrorBoundry from "../error-boundry";
 
 import "./app.css";
 import ErrorIndicator from "../error-indicator/error-indicator";
 import SwapiService from "../../services";
+import Row from "../row";
 
 export default class App extends Component {
     swapiService = new SwapiService();
@@ -43,36 +45,55 @@ export default class App extends Component {
             return <ErrorIndicator />;
         }
 
-        const itemList = (
-            <ItemList
-                onItemSelected={this.onPersonSelected}
-                getData={this.swapiService.getAllPlanets}
-                renderItem={(item) => item.name}
+        // const itemList = (
+        //     <ItemList
+        //         onItemSelected={this.onPersonSelected}
+        //         getData={this.swapiService.getAllPlanets}
+        //         renderItem={(item) => item.name}
+        //     />
+        // );
+
+        const { getPerson,
+            getStarship,
+            getPersonImage,
+            getStarshipImage } = this.swapiService;
+
+        const personDetails = (
+            <ItemDetails
+                itemId={11} 
+                getData={getPerson} 
+                getImageUrl={getPersonImage} />
+        );
+
+        const starshipDetails = (
+            <ItemDetails
+                itemId={5}
+                getData={getStarship}
+                getImageUrl={getStarshipImage} 
             />
         );
 
-        const personDetails = (
-            <ItemDetails personId={this.state.selectedPerson} />
-        );
-
-        const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
+        //const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
 
         return (
-            <div className="wrapper">
-                <Header />
-                {/* <RandomPlanet /> */}
-                {planet}
-                <div className="row mb2 button-row my-styles">
-                    <button
-                        className="toggle-planet btn btn-warning btn-lg toggle-planet-my-styles"
-                        onClick={this.toggleRandomPlanet}
-                    >
-                        Toggle Random Planet
-                    </button>
-                    <ErrorButton />
+            <ErrorBoundry>
+                <div className="wrapper">
+                    <Header />
+                    {/* {planet}
+                    <div className="row mb2 button-row my-styles">
+                        <button
+                            className="toggle-planet btn btn-warning btn-lg toggle-planet-my-styles"
+                            onClick={this.toggleRandomPlanet}
+                        >
+                            Toggle Random Planet
+                        </button>
+                        <ErrorButton />
+                    </div>
+                    <PeoplePage /> */}
+                    <Row left={personDetails} right={starshipDetails} />
                 </div>
-                <PeoplePage />
-            </div>
+            </ErrorBoundry>
+
         );
     }
 }

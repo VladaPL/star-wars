@@ -1,5 +1,8 @@
 export default class SwapiService {
+
     _apiBase = "https://swapi.dev/api"; // "_" - это приватная часть класса, ее не следует использовать снаружи
+    _imageBase = 'https://starwars-visualguide.com/assets/img';
+
     getResource = async(url) => {
         const res = await fetch(`${this._apiBase}${url}`);
 
@@ -37,6 +40,22 @@ export default class SwapiService {
         const ship = await this.getResource(`/starship/${id}/`);
         return this._transformStarship(ship);
     };
+
+
+
+    getPersonImage = ({id}) => {
+        return `${this._imageBase}/characters/${id}.jpg`
+      };
+    
+    getStarshipImage = ({id}) => {
+        return `${this._imageBase}/starships/${id}.jpg`
+    };
+
+    getPlanetImage = ({id}) => {
+        return `${this._imageBase}/planets/${id}.jpg`
+    };
+
+
 
     _extractId = (item) => {
         const idRegExp = /\/([0-9]*)\/$/; // используем https://regex101.com/, чтобы достать из url объекта планета цифру для id.
