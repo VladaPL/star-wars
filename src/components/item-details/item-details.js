@@ -6,6 +6,21 @@ import Spinner from "../spinner";
 
 import "./item-details.css";
 
+const Record = ({ item, field, label }) => {
+    return (
+      <li className="list-group-item">
+        <span className="term">{label}</span>
+        <span>{ item[field] }</span>
+      </li>
+    );
+  };
+  
+  export {
+    Record
+  };
+
+
+
 export default class ItemDetails extends Component {
     swapiService = new SwapiService();
 
@@ -56,60 +71,34 @@ export default class ItemDetails extends Component {
     }
 
     render() {
-        const { item, loading, error, image } = this.state;
 
+        const { item, image } = this.state;
         if (!item) {
-            return <span> Select an item from a list</span>;
+          return <span>Select a item from a list</span>;
         }
-
-        const hasData = !(loading || error); // Если не загрузка и не ошибка, то контент
-
-        const errorMessage = error ? <ErrorIndicator /> : null;
-        const spinner = loading ? <Spinner /> : null;
-        // TODO: Spinner не отображается при смене персонажа по клику на список
-        const content = hasData ? <PersonView item={item} image={image} /> : null;
-
+    
+        const { id, name, gender,
+                  birthYear, eyeColor } = item;
+    
         return (
-            <div className="item-details card">
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
-    }
-}
-
-const PersonView = ({ item, image }) => {
-    const { name, gender, birthYear, eyeColor } = item;
-
-    return (
-        <React.Fragment>
-            <img
-                className="item-image"
-                src={image}
-                alt="item-img"
-            />
-
+          <div className="item-details card">
+            <img className="item-image"
+              src={image}
+              alt="item"/>
+    
             <div className="card-body">
-                <h4>{name}</h4>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        <span className="term">Gender</span>
-                        <span>{gender}</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Birth Year</span>
-                        <span>{birthYear}</span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Eye Color</span>
-                        <span>{eyeColor}</span>
-                    </li>
-                    <li className="list-group-item">
-                        <ErrorButton />
-                    </li>
-                </ul>
+              <h4>{name}</h4>
+              <ul className="list-group list-group-flush">
+                {
+                  React.Children.map(this.props.children, (child) => {
+                    return React.cloneElement(child, { item });
+                  })
+                  // Здесь мы прошлись по всем детям и клонировали каждого, добавив к каждой копии элемента свойство item.
+                }
+              </ul>
+              <ErrorButton />
             </div>
-        </React.Fragment>
-    );
-};
+          </div>
+        );
+      }
+    }

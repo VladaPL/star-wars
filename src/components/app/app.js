@@ -12,6 +12,7 @@ import "./app.css";
 import ErrorIndicator from "../error-indicator/error-indicator";
 import SwapiService from "../../services";
 import Row from "../row";
+import { Record } from "../item-details/item-details";
 
 export default class App extends Component {
     swapiService = new SwapiService();
@@ -56,13 +57,19 @@ export default class App extends Component {
         const { getPerson,
             getStarship,
             getPersonImage,
-            getStarshipImage } = this.swapiService;
+            getStarshipImage,
+            getPlanet,
+            getPlanetImage } = this.swapiService;
 
         const personDetails = (
             <ItemDetails
                 itemId={11} 
                 getData={getPerson} 
-                getImageUrl={getPersonImage} />
+                getImageUrl={getPersonImage}
+            >
+                <Record field="gender" label="Gender"/>
+                <Record field="eyeColor" label="Eye Color"/>
+            </ItemDetails>
         );
 
         const starshipDetails = (
@@ -71,6 +78,18 @@ export default class App extends Component {
                 getData={getStarship}
                 getImageUrl={getStarshipImage} 
             />
+        );
+
+        const planetDetails = (
+            <ItemDetails
+                itemId={10}
+                getData={getPlanet}
+                getImageUrl={getPlanetImage} 
+            >
+                <Record field="model" label="Model"/>
+                <Record field="length" label="Length"/>
+                <Record field="costInCredits" label="Cost"/>
+            </ItemDetails>
         );
 
         //const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
@@ -90,7 +109,8 @@ export default class App extends Component {
                         <ErrorButton />
                     </div>
                     <PeoplePage /> */}
-                    <Row left={personDetails} right={starshipDetails} />
+                    <Row left={personDetails}/>
+                    <Row left={planetDetails}/>
                 </div>
             </ErrorBoundry>
 
