@@ -26,7 +26,8 @@ export default class PeoplePage extends Component {
                 renderItem={({ name, gender, birthYear }) =>
                     `${name} (${gender}, ${birthYear})`
                 }
-            />
+            >
+            </ItemList>
         );
 
         const itemDetails = (

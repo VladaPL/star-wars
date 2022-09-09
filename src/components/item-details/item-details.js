@@ -15,9 +15,7 @@ const Record = ({ item, field, label }) => {
     );
   };
   
-  export {
-    Record
-  };
+  export {Record};
 
 
 

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Header from "../header";
 //import RandomPlanet from "../random-planet";
 //import PeoplePage from "../people-page";
-//import ItemList from "../item-list";
+import ItemList from "../item-list";
 import ItemDetails from "../item-details";
 //import ErrorButton from "../error-button";
 import ErrorBoundry from "../error-boundry";
@@ -46,13 +46,13 @@ export default class App extends Component {
             return <ErrorIndicator />;
         }
 
-        // const itemList = (
-        //     <ItemList
-        //         onItemSelected={this.onPersonSelected}
-        //         getData={this.swapiService.getAllPlanets}
-        //         renderItem={(item) => item.name}
-        //     />
-        // );
+        const itemList = (
+            <ItemList
+                onItemSelected={this.onPersonSelected}
+                getData={this.swapiService.getAllPlanets}
+                renderItem={(item) => item.name}
+            />
+        );
 
         const { getPerson,
             getStarship,
@@ -109,6 +109,7 @@ export default class App extends Component {
                         <ErrorButton />
                     </div>
                     <PeoplePage /> */}
+                    {itemList}
                     <Row left={personDetails}/>
                     <Row left={planetDetails}/>
                 </div>
