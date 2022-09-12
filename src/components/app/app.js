@@ -1,120 +1,93 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Header from "../header";
-//import RandomPlanet from "../random-planet";
-//import PeoplePage from "../people-page";
-import ItemList from "../item-list";
-import ItemDetails from "../item-details";
-//import ErrorButton from "../error-button";
-import ErrorBoundry from "../error-boundry";
+import Header from '../header';
+import RandomPlanet from '../random-planet';
+import ErrorBoundry from '../error-boundry';
 
-import "./app.css";
-import ErrorIndicator from "../error-indicator/error-indicator";
+import ItemDetails from "../item-details/item-details";
+import Record from '../record';
 import SwapiService from "../../services";
-import Row from "../row";
-import { Record } from "../item-details/item-details";
+
+import {
+  PersonDetails,
+  PlanetDetails,
+  PersonList,
+  PlanetList,
+} from '../sw-components';
+
+import './app.css';
+import { StarshipList } from '../sw-components/item-list ';
 
 export default class App extends Component {
-    swapiService = new SwapiService();
 
-    state = {
-        showRandomPlanet: true,
-        hasError: false,
-    };
+  swapiService = new SwapiService();
 
-    toggleRandomPlanet = () => {
-        this.setState((state) => {
-            return {
-                showRandomPlanet: !state.showRandomPlanet,
-            };
-        });
-    };
+  state = {
+    showRandomPlanet: true
+  };
 
-    onPersonSelected = (id) => {
-        this.setState({
-            selectedPerson: id,
-        });
-    };
+  toggleRandomPlanet = () => {
+    this.setState((state) => {
+      return {
+        showRandomPlanet: !state.showRandomPlanet
+      }
+    });
+  };
 
-    componentDidCatch() {
-        console.log("componentDidCatch()");
-        this.setState({ hasError: true });
-    }
+  render() {
 
-    render() {
-        if (this.state.hasError) {
-            return <ErrorIndicator />;
-        }
+    const planet = this.state.showRandomPlanet ?
+      <RandomPlanet/> :
+      null;
 
-        const itemList = (
-            <ItemList
-                onItemSelected={this.onPersonSelected}
-                getData={this.swapiService.getAllPlanets}
-                renderItem={(item) => item.name}
-            />
-        );
-
-        const { getPerson,
+    const { getPerson,
             getStarship,
             getPersonImage,
             getStarshipImage,
-            getPlanet,
-            getPlanetImage } = this.swapiService;
+            getAllPeople,
+            getAllPlanets } = this.swapiService;
 
-        const personDetails = (
-            <ItemDetails
-                itemId={11} 
-                getData={getPerson} 
-                getImageUrl={getPersonImage}
-            >
-                <Record field="gender" label="Gender"/>
-                <Record field="eyeColor" label="Eye Color"/>
-            </ItemDetails>
-        );
+    const personDetails = (
+      <ItemDetails
+        itemId={11}
+        getData={getPerson}
+        getImageUrl={getPersonImage} >
 
-        const starshipDetails = (
-            <ItemDetails
-                itemId={5}
-                getData={getStarship}
-                getImageUrl={getStarshipImage} 
-            />
-        );
+        <Record field="gender" label="Gender" />
+        <Record field="eyeColor" label="Eye Color" />
 
-        const planetDetails = (
-            <ItemDetails
-                itemId={10}
-                getData={getPlanet}
-                getImageUrl={getPlanetImage} 
-            >
-                <Record field="model" label="Model"/>
-                <Record field="length" label="Length"/>
-                <Record field="costInCredits" label="Cost"/>
-            </ItemDetails>
-        );
+      </ItemDetails>
+    );
 
-        //const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
+    const starshipDetails = (
+      <ItemDetails
+        itemId={5}
+        getData={getStarship}
+        getImageUrl={getStarshipImage}>
 
-        return (
-            <ErrorBoundry>
-                <div className="wrapper">
-                    <Header />
-                    {/* {planet}
-                    <div className="row mb2 button-row my-styles">
-                        <button
-                            className="toggle-planet btn btn-warning btn-lg toggle-planet-my-styles"
-                            onClick={this.toggleRandomPlanet}
-                        >
-                            Toggle Random Planet
-                        </button>
-                        <ErrorButton />
-                    </div>
-                    <PeoplePage /> */}
-                    {itemList}
-                    <Row left={personDetails}/>
-                    <Row left={planetDetails}/>
-                </div>
-            </ErrorBoundry>
+        <Record field="model" label="Model" />
+        <Record field="length" label="Length" />
+        <Record field="costInCredits" label="Cost" />
+      </ItemDetails>
+    );
 
-        );
-    }
+    return (
+      <ErrorBoundry>
+        <div className="stardb-app">
+          <Header />
+
+          <PersonDetails itemId={11} />
+
+          <PlanetDetails itemId={5} />
+
+          <PersonList />
+
+          <PlanetList />
+          
+          <StarshipList/>
+
+        </div>
+      </ErrorBoundry>
+    );
+  }
 }
