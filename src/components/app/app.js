@@ -6,7 +6,7 @@ import ErrorBoundry from "../error-boundry";
 
 import ItemDetails from "../item-details/item-details";
 import Record from "../record";
-import SwapiService from "../../services";
+import SwapiService from "../../services/swapi-service";
 
 import { SwapiServiceProvider } from "../swapi-service-context/swapi-service-context";
 
