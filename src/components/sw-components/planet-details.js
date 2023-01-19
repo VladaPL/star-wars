@@ -6,7 +6,7 @@ import Record from "../record";
 
 const PlanetDetails = (props) => {
     return (
-        <ItemDetails {... props}>
+        <ItemDetails {...props}>
             <Record field="population" label="Population" />
             <Record field="rotationPeriod" label="Rotation Period" />
             <Record field="diameter" label="Diameter" />
@@ -17,8 +17,8 @@ const PlanetDetails = (props) => {
 const mapMethodsToProps = (swapiService) => {
     return {
         getData: swapiService.getPlanet,
-        getImageUrl: swapiService.getPlanetImage
+        getImageUrl: swapiService.getPlanetImage,
     };
 };
 
-export default withSwapiService(PlanetDetails, mapMethodsToProps);
+export default withSwapiService(mapMethodsToProps)(PlanetDetails);
