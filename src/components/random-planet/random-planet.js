@@ -6,6 +6,11 @@ import ErrorIndicator from "../error-indicator/error-indicator";
 import "./random-planet.css";
 
 export default class RandomPlanet extends Component {
+    
+    static defaultProps = {
+        updateInterval: 10000,
+    };
+
     SwapiService = new SwapiService(); // вызвали сервис, который получит данные
 
     state = {
@@ -16,8 +21,9 @@ export default class RandomPlanet extends Component {
 
     componentDidMount() {
         // Используем для инициализации (работа с DOM-элементами, получение данных).
+        const { updateInterval } = this.props;
         this.updatePlanet();
-        this.interval = setInterval(this.updatePlanet, 10000);
+        this.interval = setInterval(this.updatePlanet, updateInterval);
     }
 
     componentWillUnmount() {
@@ -71,6 +77,7 @@ const PlanetView = ({ planet }) => {
     return (
         <React.Fragment>
             <img
+                alt="planet"
                 className="planet-image"
                 src={`https://starwars-visualguide.com/assets/img/planets/${id}.jpg`}
             />
