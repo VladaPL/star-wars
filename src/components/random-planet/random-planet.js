@@ -6,9 +6,23 @@ import ErrorIndicator from "../error-indicator/error-indicator";
 import "./random-planet.css";
 
 export default class RandomPlanet extends Component {
-    
     static defaultProps = {
         updateInterval: 10000,
+    };
+
+    // propTypes проверяет значения свойств и кидает в консоль сообщение об ощибке переданного типа данных в пропс.
+    static propTypes = {
+        updateInterval: (props, propsName, componentName) => {
+            const value = props[propsName];
+
+            if (typeof value === "number" && !isNaN(value)) {
+                return null;
+            }
+
+            return new TypeError(
+                `${componentName}: ${propsName} must be number`
+            );
+        },
     };
 
     SwapiService = new SwapiService(); // вызвали сервис, который получит данные
