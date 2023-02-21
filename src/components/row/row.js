@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Row = ({ left, right }) => {
     // компонет контейнер
 
@@ -8,5 +10,12 @@ const Row = ({ left, right }) => {
         </div>
     );
 };
+
+Row.propTypes = {
+    left: PropTypes.node,
+    right: PropTypes.node,
+};
+// node проверяет, что left и right это что-то что можно отрендерить в JSX.
+// elemtnt PropTypes может работать только с реакт компонентами.
 
 export default Row;
